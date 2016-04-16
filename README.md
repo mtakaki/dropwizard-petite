@@ -248,7 +248,7 @@ It means the `SessionFactory` has not been added to the container. As the stack 
 
 ```java
 @Override
-public void run(final CredentialStorageConfiguration configuration,
+public void run(final TestConfiguration configuration,
         final Environment environment) throws Exception {
     final PetiteContainer petiteContainer = this.petite.getPetiteContainer();
     petiteContainer.addBean(SessionFactory.class.getName(), this.hibernate.getSessionFactory());
