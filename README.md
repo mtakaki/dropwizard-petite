@@ -5,11 +5,11 @@
 [![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.github.mtakaki/dropwizard-petite/badge.svg)](http://www.javadoc.io/doc/com.github.mtakaki/dropwizard-petite)
 
 # dropwizard-petite
-This library provides an integration for the awesome [Jodd Petite](http://jodd.org/doc/petite/index.html) and dropwizard. It provides a light weight dependency injection, similarly to Spring but with a much smaller footprint.
+This library provides an integration for the awesome [Jodd Petite](http://jodd.org/doc/petite/index.html) and dropwizard. It provides a light weight dependency injection, similarly to Spring but with a much smaller footprint and better error messages.
 
 It also comes with an optional implementation (`MonitoredPetiteContainer`) that adds metrics to `PetiteContainer`, so you can monitor the cost of running Petite in your application. By default it's disabled and works exactly as if you implemented it yourself.
 
-Jodd Petite by default will make your beans singleton, which is perfect for DAOs and resource classes, most of the time.
+Jodd Petite by default will make your beans singleton, which is perfect for most of DAOs and resource classes.
 
 ## Maven
 The library is available at the maven central, so just add dependency to `pom.xml`:
@@ -56,7 +56,7 @@ public class TestApplication extends Application<TestConfiguration> {
     @Override
     public void run(final TestConfiguration configuration, final Environment environment)
             throws Exception {
-        // Registering the SessionFactory to the container.
+        // Registering the SessionFactory to the container because SessionFactory is not annotated with @PetiteBean.
         this.petite.getPetiteContainer().addBean(SessionFactory.class.getName(),
                 this.hibernate.getSessionFactory());
 
@@ -189,5 +189,68 @@ These metrics will show up if you setup the `useMetrics` settings to true (it's 
       "duration_units" : "seconds",
       "rate_units" : "calls/second"
     }
+}
+```
+
+## Debugging errors
+
+### Null pointer exception when registering resource
+If you're getting an NPE when registering your resource, like this:
+
+```
+Exception in thread "main" java.lang.NullPointerException
+	at com.google.common.base.Preconditions.checkNotNull(Preconditions.java:210)
+	at io.dropwizard.jersey.setup.JerseyEnvironment.register(JerseyEnvironment.java:37)
+	at com.github.mtakaki.test.TestApplication.run(TestApplication.java:90)
+	at com.github.mtakaki.test.TestApplication.run(TestApplication.java:1)
+	at io.dropwizard.cli.EnvironmentCommand.run(EnvironmentCommand.java:40)
+	at io.dropwizard.cli.ConfiguredCommand.run(ConfiguredCommand.java:77)
+	at io.dropwizard.cli.Cli.run(Cli.java:70)
+	at io.dropwizard.Application.run(Application.java:80)
+	at com.github.mtakaki.test.TestApplication.main(TestApplication.java:34)
+```
+
+It means the container could **not** find your bean. It means that your bean was not registered.
+
+**Solution**:
+
+- Set `automagicConfigurator: true` in your configuration file.
+- Manually register the bean into your `PetiteContainer`.
+
+### Wiring exception
+If your application fails to initialize due to a `PetiteException` and it throws this stack trace:
+
+```
+Exception in thread "main" jodd.petite.PetiteException: Wiring constructor failed. References 'null,sessionFactory,org.hibernate.SessionFactory' not found for constructor: public com.github.mtakaki.test.database.TestDAO(org.hibernate.SessionFactory)
+	at jodd.petite.PetiteContainer.newBeanInstance(PetiteContainer.java:90)
+	at jodd.petite.PetiteContainer.getBean(PetiteContainer.java:368)
+	at jodd.petite.PetiteContainer.getBean(PetiteContainer.java:325)
+	at jodd.petite.PetiteContainer.newBeanInstance(PetiteContainer.java:87)
+	at jodd.petite.PetiteContainer.getBean(PetiteContainer.java:368)
+	at jodd.petite.PetiteContainer.getBean(PetiteContainer.java:314)
+	at com.github.mtakaki.dropwizard.petite.MonitoredPetiteContainer.getBean(MonitoredPetiteContainer.java:29)
+	at jodd.petite.PetiteContainer.getBean(PetiteContainer.java:302)
+	at com.github.mtakaki.dropwizard.petite.MonitoredPetiteContainer.getBean(MonitoredPetiteContainer.java:22)
+	at com.github.mtakaki.test.TestApplication.run(TestApplication.java:88)
+	at com.github.mtakaki.test.TestApplication.run(TestApplication.java:1)
+	at io.dropwizard.cli.EnvironmentCommand.run(EnvironmentCommand.java:40)
+	at io.dropwizard.cli.ConfiguredCommand.run(ConfiguredCommand.java:77)
+	at io.dropwizard.cli.Cli.run(Cli.java:70)
+	at io.dropwizard.Application.run(Application.java:80)
+	at com.github.mtakaki.test.TestApplication.main(TestApplication.java:32)
+```
+
+It means the `SessionFactory` has not been added to the container. As the stack trace shows, it tried calling a constructor that receives a `SessionFactory` but it could not find the bean to call it.
+
+**Solution**:
+
+- Register the `SessionFactory`. `SessionFactory` is not part of your project, so you cannot annotate it with `@PetiteBean`. The solution is to manually add the bean to the container so it can be found when auto-wiring your beans:
+
+```java
+@Override
+public void run(final CredentialStorageConfiguration configuration,
+        final Environment environment) throws Exception {
+    final PetiteContainer petiteContainer = this.petite.getPetiteContainer();
+    petiteContainer.addBean(SessionFactory.class.getName(), this.hibernate.getSessionFactory());
 }
 ```
