@@ -66,7 +66,6 @@ public class TestApplication extends Application<TestConfiguration> {
 }
 ```
 
-
 ### Beans
 To expose your class as a bean you will need to annotate it with `@PetiteBean` and the constructor with `@PetiteInject`, although the latter is optional as Petite can figure it out automatically. Commonly you would annotate your DAO and Resource classes, like this:
 
@@ -110,7 +109,7 @@ public class TestConfiguration extends Configuration {
 }
 ```
 
-And them YAML will look like this:
+And the YAML will look like this:
 
 ```yml
 petite:
