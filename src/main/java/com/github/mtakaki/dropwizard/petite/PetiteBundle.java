@@ -22,6 +22,16 @@ public abstract class PetiteBundle<T extends Configuration> implements Configure
         // We don't have anything to do at this moment.
     }
 
+    /**
+     * Extracts the {@link PetiteConfiguration} from the given configuration
+     * object.
+     *
+     * @param configuration
+     *            The application configuration object, from where we'll get the
+     *            petite configuration.
+     * @return The petite configuration used to build the
+     *         {@link PetiteContainer}.
+     */
     protected abstract PetiteConfiguration getConfiguration(T configuration);
 
     public PetiteContainer getPetiteContainer() {

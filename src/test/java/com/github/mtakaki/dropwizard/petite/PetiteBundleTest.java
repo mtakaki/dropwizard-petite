@@ -1,6 +1,9 @@
 package com.github.mtakaki.dropwizard.petite;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -28,6 +31,8 @@ public class PetiteBundleTest {
     private Bootstrap<?> bootstrap;
     @Mock
     private Environment environment;
+    @Mock
+    private MetricRegistry metricRegistry;
 
     @Before
     public void setup() {
@@ -43,10 +48,9 @@ public class PetiteBundleTest {
             }
         };
 
-        final MetricRegistry metricRegistry = mock(MetricRegistry.class);
-        when(this.environment.metrics()).thenReturn(metricRegistry);
+        when(this.environment.metrics()).thenReturn(this.metricRegistry);
         final Timer automagicTimer = mock(Timer.class);
-        when(metricRegistry
+        when(this.metricRegistry
                 .timer(MetricRegistry.name(PetiteConfiguration.class, "automagicConfigurator")))
                         .thenReturn(automagicTimer);
         final Timer.Context automagicTimerContext = mock(Timer.Context.class);
@@ -63,5 +67,39 @@ public class PetiteBundleTest {
     @Test
     public void testRun() throws Exception {
         this.petiteBundle.run(new TestConfiguration(), this.environment);
+
+        verify(this.environment, times(1)).metrics();
+        verify(this.environment, times(1)).lifecycle();
+        verify(this.metricRegistry, times(1))
+                .timer(MetricRegistry.name(PetiteConfiguration.class, "automagicConfigurator"));
+    }
+
+    @Test
+    public void testRunWithoutAutomagicConfigurator() throws Exception {
+        this.petiteBundle = new PetiteBundle<PetiteBundleTest.TestConfiguration>() {
+            @Override
+            protected PetiteConfiguration getConfiguration(final TestConfiguration configuration) {
+                final PetiteConfiguration petite = new PetiteConfiguration();
+                petite.setAutomagicConfigurator(false);
+                petite.setRegisterSelf(true);
+                petite.setUseFullTypeNames(true);
+                petite.setUseMetrics(false);
+                return petite;
+            }
+        };
+
+        this.petiteBundle.run(new TestConfiguration(), this.environment);
+
+        verify(this.environment, times(1)).metrics();
+        verify(this.environment, times(1)).lifecycle();
+        verify(this.metricRegistry, times(0))
+                .timer(MetricRegistry.name(PetiteConfiguration.class, "automagicConfigurator"));
+    }
+
+    @Test
+    public void testGetPetiteContainer() throws Exception {
+        this.petiteBundle.run(new TestConfiguration(), this.environment);
+
+        assertThat(this.petiteBundle.getPetiteContainer()).isNotNull();
     }
 }

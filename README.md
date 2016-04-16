@@ -7,7 +7,7 @@
 # dropwizard-petite
 This library provides an integration for the awesome [Jodd Petite](http://jodd.org/doc/petite/index.html) and dropwizard. It provides a light weight dependency injection, similarly to Spring but with a much smaller footprint.
 
-It also comes with an optional implementation (`MonitoredPetiteContainer`) that adds metrics to the `PetiteContainer`, so you can monitor the cost of running Petite in your application. By default it's disabled and works exactly as if you implemented it yourself.
+It also comes with an optional implementation (`MonitoredPetiteContainer`) that adds metrics to `PetiteContainer`, so you can monitor the cost of running Petite in your application. By default it's disabled and works exactly as if you implemented it yourself.
 
 Jodd Petite by default will make your beans singleton, which is perfect for DAOs and resource classes, most of the time.
 
@@ -66,6 +66,7 @@ public class TestApplication extends Application<TestConfiguration> {
 }
 ```
 
+
 ### Beans
 To expose your class as a bean you will need to annotate it with `@PetiteBean` and the constructor with `@PetiteInject`, although the latter is optional as Petite can figure it out automatically. Commonly you would annotate your DAO and Resource classes, like this:
 
@@ -91,13 +92,6 @@ public class TestResource {
     @PetiteInject
     public TestResource(TestEntityDAO dao) {
         this.dao = dao;
-    }
-
-    @GET
-    @Path("/{id}")
-    @UnitOfWork
-    public TestEntity get(@PathParam("id") final int id) {
-        return this.dao.get(id);
     }
 }
 ```

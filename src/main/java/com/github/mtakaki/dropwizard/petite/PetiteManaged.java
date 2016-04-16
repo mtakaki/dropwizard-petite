@@ -8,21 +8,19 @@ import jodd.petite.PetiteContainer;
 import lombok.Getter;
 
 public class PetiteManaged implements Managed {
-    private final PetiteConfiguration configuration;
-    private final MetricRegistry metricRegistry;
     @Getter
     private final PetiteContainer petite;
 
     public PetiteManaged(final PetiteConfiguration configuration,
             final MetricRegistry metricRegistry) {
-        this.configuration = configuration;
-        this.metricRegistry = metricRegistry;
-
-        this.petite = this.configuration.build(this.metricRegistry);
-        if (this.configuration.isUseFullTypeNames()) {
-            this.petite.addBean(MetricRegistry.class.getName(), this.metricRegistry);
+        // We need to initialize the container at this moment. If we initialize
+        // it in the start() method, the container won't be available in the
+        // run() method in the application.
+        this.petite = configuration.build(metricRegistry);
+        if (configuration.isUseFullTypeNames()) {
+            this.petite.addBean(MetricRegistry.class.getName(), metricRegistry);
         } else {
-            this.petite.addBean(MetricRegistry.class.getSimpleName(), this.metricRegistry);
+            this.petite.addBean(MetricRegistry.class.getSimpleName(), metricRegistry);
         }
     }
 
