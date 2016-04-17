@@ -1,6 +1,7 @@
 # Status
 ![Build Status](https://codeship.com/projects/73168060-e591-0133-7607-2e05c0d114fb/status?branch=master)
 [![Coverage Status](https://coveralls.io/repos/github/mtakaki/dropwizard-petite/badge.svg?branch=master)](https://coveralls.io/github/mtakaki/dropwizard-petite?branch=master)
+[![Codacy Badge](https://api.codacy.com/project/badge/grade/2133b69e48c248b68bee3556ec815f9a)](https://www.codacy.com/app/mitsuotakaki/dropwizard-petite)
 [![Download](https://maven-badges.herokuapp.com/maven-central/com.github.mtakaki/dropwizard-petite/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.mtakaki/dropwizard-petite)
 [![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.github.mtakaki/dropwizard-petite/badge.svg)](http://www.javadoc.io/doc/com.github.mtakaki/dropwizard-petite)
 
