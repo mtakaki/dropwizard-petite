@@ -56,7 +56,8 @@ public class TestApplication extends Application<TestConfiguration> {
     @Override
     public void run(final TestConfiguration configuration, final Environment environment)
             throws Exception {
-        // Registering the SessionFactory to the container because SessionFactory is not annotated with @PetiteBean.
+        // Registering the SessionFactory to the container because SessionFactory is not annotated
+        // with @PetiteBean.
         this.petite.getPetiteContainer().addBean(SessionFactory.class.getName(),
                 this.hibernate.getSessionFactory());
 
