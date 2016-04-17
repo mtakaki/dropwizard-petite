@@ -22,7 +22,7 @@ public class PetiteConfigurationTest {
     private MetricRegistry metricRegistry;
 
     @Before
-    public void setup() throws Exception {
+    public void setUp() throws Exception {
         this.metricRegistry = new MetricRegistry();
 
         this.expectedConfiguration = new PetiteConfiguration();

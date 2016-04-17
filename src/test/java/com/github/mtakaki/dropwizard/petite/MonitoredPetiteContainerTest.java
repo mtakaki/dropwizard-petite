@@ -28,7 +28,7 @@ public class MonitoredPetiteContainerTest {
     private Timer.Context context;
 
     @Before
-    public void setup() {
+    public void setUp() {
         when(this.metricRegistry
                 .timer("com.github.mtakaki.dropwizard.petite.MonitoredPetiteContainer.getBean"))
                         .thenReturn(this.getBeanTimer);
@@ -55,7 +55,6 @@ public class MonitoredPetiteContainerTest {
     public void testGetBeanString() {
         assertThat(this.petite.getBean(String.class)).isEqualTo("def");
 
-        // TODO Should be only 1
         verify(this.getBeanTimer, times(2)).time();
     }
 

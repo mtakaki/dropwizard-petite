@@ -22,9 +22,6 @@ import io.dropwizard.setup.Environment;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PetiteBundleTest {
-    private static class TestConfiguration extends Configuration {
-    }
-
     private PetiteBundle<TestConfiguration> petiteBundle;
 
     @Mock
@@ -34,8 +31,11 @@ public class PetiteBundleTest {
     @Mock
     private MetricRegistry metricRegistry;
 
+    private static class TestConfiguration extends Configuration {
+    }
+
     @Before
-    public void setup() {
+    public void setUp() {
         this.petiteBundle = new PetiteBundle<PetiteBundleTest.TestConfiguration>() {
             @Override
             protected PetiteConfiguration getConfiguration(final TestConfiguration configuration) {

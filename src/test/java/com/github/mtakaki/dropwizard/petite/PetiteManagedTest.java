@@ -1,18 +1,19 @@
 package com.github.mtakaki.dropwizard.petite;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import io.dropwizard.testing.FixtureHelpers;
 
+import jodd.petite.PetiteConfig;
 import jodd.petite.PetiteContainer;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -21,20 +22,12 @@ public class PetiteManagedTest {
 
     private PetiteManaged petiteManaged;
 
-    private PetiteConfiguration configuration;
-    private MetricRegistry metricRegistry;
-    @Mock
-    private PetiteContainer petite;
-    @Mock
-    private Timer timer;
-
     @Before
-    public void setup() throws Exception {
-        this.configuration = MAPPER.readValue(
+    public void setUp() throws Exception {
+        final PetiteConfiguration configuration = MAPPER.readValue(
                 FixtureHelpers.fixture("config_short_name_automagic.yml"),
                 PetiteConfiguration.class);
-        this.metricRegistry = new MetricRegistry();
-        this.petiteManaged = new PetiteManaged(this.configuration, this.metricRegistry);
+        this.petiteManaged = new PetiteManaged(configuration, new MetricRegistry());
     }
 
     @Test
@@ -46,5 +39,10 @@ public class PetiteManagedTest {
     public void testStop() throws Exception {
         this.petiteManaged.start();
         this.petiteManaged.stop();
+
+        final PetiteContainer petite = this.petiteManaged.getPetite();
+        final PetiteConfig petiteConfig = petite.getConfig();
+        assertThat(petiteConfig.getUseFullTypeNames()).isFalse();
+        assertThat(petite.getBean(MetricRegistry.class.getSimpleName())).isNotNull();
     }
 }
