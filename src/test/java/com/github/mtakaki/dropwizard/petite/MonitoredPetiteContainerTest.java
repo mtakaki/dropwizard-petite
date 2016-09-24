@@ -46,7 +46,7 @@ public class MonitoredPetiteContainerTest {
 
     @Test
     public void testGetBean() {
-        assertThat(this.petite.getBean(String.class.getName())).isEqualTo("abc");
+        assertThat((String) this.petite.getBean(String.class.getName())).isEqualTo("abc");
 
         verify(this.getBeanTimer, times(1)).time();
     }

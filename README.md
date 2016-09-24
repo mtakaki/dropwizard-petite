@@ -214,7 +214,7 @@ Exception in thread "main" java.lang.NullPointerException
 
 It means the container could **not** find your bean. It means that your bean was not registered.
 
-**Solution**:
+**Solutions**:
 
 - Set `automagicConfigurator: true` in your configuration file.
 - Manually register the bean into your `PetiteContainer`.

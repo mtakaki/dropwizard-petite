@@ -24,7 +24,7 @@ public class MonitoredPetiteContainer extends PetiteContainer {
     }
 
     @Override
-    public Object getBean(final String name) {
+    public <T> T getBean(final String name) {
         try (Timer.Context context = this.timerGetBean.time()) {
             return super.getBean(name);
         }
