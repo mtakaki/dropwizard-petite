@@ -12,6 +12,13 @@ It also comes with an optional implementation (`MonitoredPetiteContainer`) that 
 
 Jodd Petite by default will make your beans singleton, which is perfect for most of DAOs and resource classes.
 
+Supported versions:
+
+| Dropwizard  |  Jodd Petite |
+|---|---|
+| 0.9.X  | 0.0.1  |
+| 1.X.X  | 1.0.0  |
+
 ## Maven
 The library is available at the maven central, so just add dependency to `pom.xml`:
 
@@ -20,7 +27,7 @@ The library is available at the maven central, so just add dependency to `pom.xm
   <dependency>
     <groupId>com.github.mtakaki</groupId>
     <artifactId>dropwizard-petite</artifactId>
-    <version>0.0.1</version>
+    <version>1.0.0</version>
   </dependency>
 </dependencies>
 ```
