@@ -4,6 +4,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/2133b69e48c248b68bee3556ec815f9a)](https://www.codacy.com/app/mitsuotakaki/dropwizard-petite)
 [![Download](https://maven-badges.herokuapp.com/maven-central/com.github.mtakaki/dropwizard-petite/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.mtakaki/dropwizard-petite)
 [![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.github.mtakaki/dropwizard-petite/badge.svg)](http://www.javadoc.io/doc/com.github.mtakaki/dropwizard-petite)
+[![Dependency Status](https://www.versioneye.com/user/projects/57e785db79806f0039832df7/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/57e785db79806f0039832df7)
 
 # dropwizard-petite
 This library provides an integration for the awesome [Jodd Petite](http://jodd.org/doc/petite/index.html) and dropwizard. It provides a light weight dependency injection, similarly to Spring but with a much smaller footprint and better error messages.
