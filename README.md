@@ -19,6 +19,7 @@ Supported versions:
 |---|---|
 | 0.9.X  | 0.0.1  |
 | 1.X.X  | 1.0.0  |
+| 1.1.x  | 1.1.4  |
 
 ## Maven
 The library is available at the maven central, so just add dependency to `pom.xml`:
@@ -28,7 +29,7 @@ The library is available at the maven central, so just add dependency to `pom.xm
   <dependency>
     <groupId>com.github.mtakaki</groupId>
     <artifactId>dropwizard-petite</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.4</version>
   </dependency>
 </dependencies>
 ```
