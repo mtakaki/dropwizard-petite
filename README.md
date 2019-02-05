@@ -7,7 +7,7 @@
 [![Dependency Status](https://www.versioneye.com/user/projects/57e785db79806f0039832df7/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/57e785db79806f0039832df7)
 
 # dropwizard-petite
-This library provides an integration for the awesome [Jodd Petite](http://jodd.org/doc/petite/index.html) and dropwizard. It provides a light weight dependency injection, similarly to Spring but with a much smaller footprint and better error messages.
+This library provides an integration for the awesome [Jodd Petite](https://jodd.org/petite/) and dropwizard. It provides a light weight dependency injection, similarly to Spring but with a much smaller footprint and better error messages.
 
 It also comes with an optional implementation (`MonitoredPetiteContainer`) that adds metrics to `PetiteContainer`, so you can monitor the cost of running Petite in your application. By default it's disabled and works exactly as if you implemented it yourself.
 
@@ -15,11 +15,12 @@ Jodd Petite by default will make your beans singleton, which is perfect for most
 
 Supported versions:
 
-| Dropwizard  |  Jodd Petite |
-|---|---|
-| 0.9.X  | 0.0.1  |
-| 1.X.X  | 1.0.0  |
-| 1.1.x  | 1.1.4  |
+| Dropwizard-petite  | Dropwizard  |  Jodd Petite |
+|---|---|---|
+| -  | 0.9.X  | 0.0.1  |
+| -  | 1.X.X  | 1.0.0  |
+| -  | 1.1.x  | 1.1.4  |
+| 1.3.8  | 1.3.8  | 5.0.6  |
 
 ## Maven
 The library is available at the maven central, so just add dependency to `pom.xml`:
@@ -29,7 +30,7 @@ The library is available at the maven central, so just add dependency to `pom.xm
   <dependency>
     <groupId>com.github.mtakaki</groupId>
     <artifactId>dropwizard-petite</artifactId>
-    <version>1.1.4</version>
+    <version>1.3.8</version>
   </dependency>
 </dependencies>
 ```

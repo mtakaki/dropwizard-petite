@@ -12,7 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import io.dropwizard.testing.FixtureHelpers;
-
 import jodd.petite.PetiteConfig;
 import jodd.petite.PetiteContainer;
 
@@ -35,7 +34,7 @@ public class PetiteManagedTest {
     @Test
     public void testStart() throws Exception {
         final PetiteContainer petite = this.petiteManaged.getPetite();
-        final PetiteConfig petiteConfig = petite.getConfig();
+        final PetiteConfig petiteConfig = petite.config();
         assertThat(petiteConfig.getUseFullTypeNames()).isFalse();
         assertThat((MetricRegistry) petite.getBean(MetricRegistry.class.getSimpleName()))
                 .isNotNull();
@@ -46,7 +45,7 @@ public class PetiteManagedTest {
         this.petiteManaged.stop();
 
         final PetiteContainer petite = this.petiteManaged.getPetite();
-        final PetiteConfig petiteConfig = petite.getConfig();
+        final PetiteConfig petiteConfig = petite.config();
         assertThat(petiteConfig.getUseFullTypeNames()).isFalse();
         assertThat((MetricRegistry) petite.getBean(MetricRegistry.class.getSimpleName()))
                 .isNull();

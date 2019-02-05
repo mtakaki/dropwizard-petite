@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import io.dropwizard.testing.FixtureHelpers;
-
 import jodd.petite.PetiteConfig;
 import jodd.petite.PetiteContainer;
 
@@ -55,7 +54,7 @@ public class PetiteConfigurationTest {
     @Test
     public void testBuild() {
         final PetiteContainer petite = this.configuration.build(this.metricRegistry);
-        final PetiteConfig config = petite.getConfig();
+        final PetiteConfig config = petite.config();
         assertThat(config.getUseFullTypeNames()).isFalse();
     }
 }
