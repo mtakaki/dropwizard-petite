@@ -30,7 +30,7 @@ public class PetiteConfiguration {
             try (Timer.Context beansContext = metricRegistry
                     .timer(MetricRegistry.name(PetiteConfiguration.class, "automagicConfigurator"))
                     .time()) {
-                new AutomagicPetiteConfigurator(petite).configure();;
+                new AutomagicPetiteConfigurator(petite).configure();
             }
         }
 

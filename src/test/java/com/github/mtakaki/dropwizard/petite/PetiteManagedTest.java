@@ -2,10 +2,10 @@ package com.github.mtakaki.dropwizard.petite;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,13 +15,13 @@ import io.dropwizard.testing.FixtureHelpers;
 import jodd.petite.PetiteConfig;
 import jodd.petite.PetiteContainer;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class PetiteManagedTest {
     private static final ObjectMapper MAPPER = new ObjectMapper(new YAMLFactory());
 
     private PetiteManaged petiteManaged;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final PetiteConfiguration configuration = MAPPER.readValue(
                 FixtureHelpers.fixture("config_short_name_automagic.yml"),

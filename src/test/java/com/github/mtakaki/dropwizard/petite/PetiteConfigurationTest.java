@@ -2,8 +2,8 @@ package com.github.mtakaki.dropwizard.petite;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,7 +20,7 @@ public class PetiteConfigurationTest {
     private PetiteConfiguration expectedConfiguration;
     private MetricRegistry metricRegistry;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.metricRegistry = new MetricRegistry();
 

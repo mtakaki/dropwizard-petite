@@ -5,16 +5,16 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class MonitoredPetiteContainerTest {
     private MonitoredPetiteContainer petite;
 
@@ -27,7 +27,7 @@ public class MonitoredPetiteContainerTest {
     @Mock
     private Timer.Context context;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         when(this.metricRegistry
                 .timer("com.github.mtakaki.dropwizard.petite.MonitoredPetiteContainer.getBean"))
@@ -35,7 +35,6 @@ public class MonitoredPetiteContainerTest {
         when(this.metricRegistry
                 .timer("com.github.mtakaki.dropwizard.petite.MonitoredPetiteContainer.addBean"))
                         .thenReturn(this.addBeanTimer);
-        when(this.getBeanTimer.time()).thenReturn(this.context);
         when(this.addBeanTimer.time()).thenReturn(this.context);
 
         this.petite = new MonitoredPetiteContainer(this.metricRegistry);
@@ -46,6 +45,8 @@ public class MonitoredPetiteContainerTest {
 
     @Test
     public void testGetBean() {
+        when(this.getBeanTimer.time()).thenReturn(this.context);
+
         assertThat((String) this.petite.getBean(String.class.getName())).isEqualTo("abc");
 
         verify(this.getBeanTimer, times(1)).time();
@@ -53,6 +54,8 @@ public class MonitoredPetiteContainerTest {
 
     @Test
     public void testGetBeanString() {
+        when(this.getBeanTimer.time()).thenReturn(this.context);
+
         assertThat(this.petite.getBean(String.class)).isEqualTo("def");
 
         verify(this.getBeanTimer, times(2)).time();
