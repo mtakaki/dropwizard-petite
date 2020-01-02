@@ -6,11 +6,11 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
@@ -20,7 +20,7 @@ import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class PetiteBundleTest {
     private PetiteBundle<TestConfiguration> petiteBundle;
 
@@ -34,7 +34,7 @@ public class PetiteBundleTest {
     private static class TestConfiguration extends Configuration {
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.petiteBundle = new PetiteBundle<PetiteBundleTest.TestConfiguration>() {
             @Override
@@ -47,14 +47,18 @@ public class PetiteBundleTest {
                 return petite;
             }
         };
+    }
 
-        when(this.environment.metrics()).thenReturn(this.metricRegistry);
+    private void setupAutomagicConfigurator() {
         final Timer automagicTimer = mock(Timer.class);
         when(this.metricRegistry
                 .timer(MetricRegistry.name(PetiteConfiguration.class, "automagicConfigurator")))
                         .thenReturn(automagicTimer);
         final Timer.Context automagicTimerContext = mock(Timer.Context.class);
         when(automagicTimer.time()).thenReturn(automagicTimerContext);
+    }
+
+    private void setupLifeCycle() {
         final LifecycleEnvironment lifeCycle = mock(LifecycleEnvironment.class);
         when(this.environment.lifecycle()).thenReturn(lifeCycle);
     }
@@ -66,6 +70,10 @@ public class PetiteBundleTest {
 
     @Test
     public void testRun() throws Exception {
+        when(this.environment.metrics()).thenReturn(this.metricRegistry);
+        this.setupAutomagicConfigurator();
+        this.setupLifeCycle();
+
         this.petiteBundle.run(new TestConfiguration(), this.environment);
 
         verify(this.environment, times(1)).metrics();
@@ -76,6 +84,9 @@ public class PetiteBundleTest {
 
     @Test
     public void testRunWithoutAutomagicConfigurator() throws Exception {
+        when(this.environment.metrics()).thenReturn(this.metricRegistry);
+        this.setupLifeCycle();
+
         this.petiteBundle = new PetiteBundle<PetiteBundleTest.TestConfiguration>() {
             @Override
             protected PetiteConfiguration getConfiguration(final TestConfiguration configuration) {
@@ -98,6 +109,10 @@ public class PetiteBundleTest {
 
     @Test
     public void testGetPetiteContainer() throws Exception {
+        when(this.environment.metrics()).thenReturn(this.metricRegistry);
+        this.setupAutomagicConfigurator();
+        this.setupLifeCycle();
+
         this.petiteBundle.run(new TestConfiguration(), this.environment);
 
         assertThat(this.petiteBundle.getPetiteContainer()).isNotNull();
